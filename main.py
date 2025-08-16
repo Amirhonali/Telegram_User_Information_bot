@@ -21,6 +21,8 @@ async def handle_message(message: types.Message):
         await age(message)
     elif 'age' not in user_data[user_id]:
         await send(message)
+    elif 'age' in user_data[user_id]:
+        await check_user(message)
 
 
 async def start(message: types.Message):
@@ -71,13 +73,19 @@ async def send(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(keyboard=buttons, resize_keyboard=True, one_time_keyboard=True)
     await message.answer(total)
     await message.answer("Tasdiqlaysizmi?", reply_markup=keyboard)
+
+
+async def check_user(message: types.Message):
+    print("check_user")
+    user_id = message.from_user.id
+    total = (f"Ism: {user_data[user_id]['name']}\n"
+             f"Phone: +{user_data[user_id]['phone']}\n"
+             f"Age: {user_data[user_id]['age']}\n")
     if message.text == "Ha":
         await bot.send_message(chanal, f"NEW USER!!!\n{total}")
         await message.answer("Siz haqingizda yozib oldik!!!")
     else:
         await start(message)
-
-
 
 
 async def main():
